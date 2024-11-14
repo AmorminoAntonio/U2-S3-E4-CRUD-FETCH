@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
+    <title>Pexels details</title>
+</head>
+
+<body>                   <!--questo HTML ci fornisce la struttura della pagina che si visualizzerà dopo il click(event onclick della card) -->
+
+    <div class="container">
+        <div class="row justify-content-center">
+            <div id="photo-container" class="col-md-8">    <!--qui abbiamo creato la struttura che alloggierà la nostra nuova card-->
+
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        const URL = "https://api.pexels.com/v1/photos/"             //creato il reindirizzamento alle PHOTOS (array) di pexels.com
+        const params = new URLSearchParams(window.location.search)  //sta attendendo la funzione handleImgClick (click sulla card)
+        const pexelsId = params.get("pexelsId")             //sta prelevando l'ID della pexels
+
+        window.addEventListener("DOMContentLoaded", function () {         //
+
+            fetch(URL + pexelsId, {     //richiamo dal server l'URL + pexelsID(id img dell'array Photos)
+                headers: {
+                    Authorization: "1GxaNR444AeSSnsbnvvqEu2NOEPkNX6v6vfvKioZnhMR9zUGVxWQc44s"   //inseriamo sempre la mia APIKEY
+                }
+            })
+                .then(resp => resp.json())
+                .then(photo => {
+
+                    const photoContainer = document.getElementById("photo-container")     //stiamo creando l'effettivo contenuto del nostro photo-container(elementi della pagina)
+                    const img = document.createElement("img")
+                    img.src = photo.src.large
+                    img.style.width = "100%"
+
+                    const p = document.createElement("p")
+                    p.innerText = photo.photographer
+
+                    photoContainer.appendChild(img)     //inserimento della IMG + P all'interno del nostro PHOTO-CONTAINER
+                    photoContainer.appendChild(p)
+                    document.body.style.backgroundColor = photo.avg_color       //forniamo al body un background-color ===  avg_color(valore che rispecchia i valori medi fra i colori delle img)
+                })
+        })
+    </script>
+</body>
+
+</html>
